@@ -20,7 +20,7 @@ jobs:
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install yaml unidecode
+          pip install pyyaml unidecode
       - name: Generate files from Python
         run: python buildTex.py
       - name: LaTeX compilation
