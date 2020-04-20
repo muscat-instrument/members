@@ -1,0 +1,24 @@
+\documentclass[a4paper]{article}
+\usepackage{datetime}
+\usepackage{ragged2e}
+
+\newdateformat{daymonthyear}{%
+  \THEDAY\ \monthname[\THEMONTH], \THEYEAR}
+
+\begin{document}
+\title{The MUSCAT Collaboration Membership}
+\author{}
+\date{\daymonthyear\today}
+
+\maketitle
+\thispagestyle{empty}
+
+\noindent
+\large
+{% MEMBER BLOCK %}
+\par
+\vspace{2EM}
+\normalsize
+\noindent
+{% AFFIL BLOCK %}
+\end{document}

@@ -1,0 +1,12 @@
+# We shouldn't push the TeX files as they are build outputs
+*.tex
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.pdf
+*.synctex.gz
+
+
+# PyCharm file
+.idea
