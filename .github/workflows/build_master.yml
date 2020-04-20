@@ -45,7 +45,7 @@ jobs:
         uses: meeDamian/github-release@2.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref }}
+          tag: ${{ github.run_number }}
           name: format('{{Member list as of {0}}}', ${{ steps.current-time.outputs.formattedTime }})
           gzip: false
           files: >
