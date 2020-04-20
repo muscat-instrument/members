@@ -46,7 +46,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.run_number }}
-          name: format('{{Member list as of {0}}}', ${{ steps.current-time.outputs.formattedTime }})
+          name: ${{ format('Member list as of {0}', steps.current-time.outputs.formattedTime )}}
           gzip: false
           files: >
             ./member_list.pdf
