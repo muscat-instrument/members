@@ -1,0 +1,51 @@
+
+name: LaTeX Build
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches:
+      - master
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build_latex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v1
+      - name: Set Up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.7'
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install yaml unidecode
+      - name: Generate files from Python
+        run: python buildTex.py
+      - name: LaTeX compilation
+        uses: dante-ev/latex-action@v0.2.0
+        with:
+          # The root LaTeX file to be compiled
+          root_file: member_list.tex
+          # The working directory for the latex compiler to be invoked
+          # working_directory: # optional
+          # LaTeX engine to be used
+          # compiler: # optional, default is latexmk
+          # Extra arguments to be passed to the latex compiler
+          # args: # optional, default is -pdf -latexoption=-file-line-error -latexoption=-interaction=nonstopmode
+          # Install extra packages by apt-get
+          # extra_system_packages: # optional
+      - name: Create Release
+        id: create_release
+        uses: muscat-instrument/github-release@v2.1.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: master
+          name: Main Release
+          body: Most recent master release version
+          allow_override: true
+          replace: true
+          gzip: false
+          draft: false
+          files: ./member_list.pdf
