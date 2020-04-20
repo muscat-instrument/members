@@ -22,7 +22,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install pyyaml unidecode
       - name: Generate files from Python
-        run: python buildTex.py
+        run: python buildFiles.py
       - name: LaTeX compilation
         uses: dante-ev/latex-action@v0.2.0
         with:
@@ -36,16 +36,19 @@ jobs:
           # args: # optional, default is -pdf -latexoption=-file-line-error -latexoption=-interaction=nonstopmode
           # Install extra packages by apt-get
           # extra_system_packages: # optional
-      - name: Create Release
-        id: create_release
-        uses: muscat-instrument/github-release@v2.1.2
+      - name: Get current date string
+        uses: srfrnk/current-time@master
+        id: current-date
+        with:
+          format: DD/MM/YYYY
+      - name: Release files
+        uses: meeDamian/github-release@2.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: master
-          name: Main Release
-          body: Most recent master release version
-          allow_override: true
-          replace: true
+          tag: ${{ github.ref }}
+          name: Member List as of ${{ steps.current-time.outputs.formattedTime }}  
           gzip: false
-          draft: false
-          files: ./member_list.pdf
+          files: >
+            ./member_list.pdf
+            ./member_list.tsv
+

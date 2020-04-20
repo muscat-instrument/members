@@ -16,21 +16,39 @@ with open('members.yaml', 'r') as stream:
 
 members = []
 affiliations = []
+members_full = []
 
-for author in list(dic['PIs'].keys()):
-    for i, name in enumerate(author.split()[::-1]):
+for member in list(dic['PIs'].keys()):
+    for i, name in enumerate(member.split()):
         if i == 0:
-            aut = [name]
+            mem = name
+        elif i == len(member.split()) - 1:
+            mem += ' ' + name
         else:
-            aut.append(name[0])
-    members.append('. '.join(aut[::-1]))
-    affiliations.append(dic['PIs'][author]['Affiliation'])
+            mem += ' ' + name[0] + '.'
+    members_full.append(mem)
+    for i, name in enumerate(member.split()[::-1]):
+        if i == 0:
+            mem = [name]
+        else:
+            mem.append(name[0])
+    members.append('. '.join(mem[::-1]))
+    affiliations.append(dic['PIs'][member]['Affiliation'])
 
 membersTemp = []
+membersTemp_full = []
 membersToSort = []
 affiliationsTemp = []
 
 for member in list(dic['Members'].keys()):
+    for i, name in enumerate(member.split()):
+        if i == 0:
+            mem = name
+        elif i == len(member.split()) - 1:
+            mem += ' ' + name
+        else:
+            mem += ' ' + name[0] + '.'
+    membersTemp_full.append(mem)
     for i, name in enumerate(member.split()[::-1]):
         if i == 0:
             mem = [name]
@@ -44,9 +62,11 @@ for member in list(dic['Members'].keys()):
 idxs = sorted(range(len(membersToSort)), key=membersToSort.__getitem__)
 
 membersTemp = [membersTemp[i] for i in idxs]
+membersTemp_full = [membersTemp_full[i] for i in idxs]
 affiliationsTemp = [affiliationsTemp[i] for i in idxs]
 
 members += membersTemp
+members_full += membersTemp_full
 affiliations += affiliationsTemp
 
 affilUniq = []
@@ -111,3 +131,19 @@ template = template.replace('{% AFFIL BLOCK %}', affil_block)
 
 with open('member_list.tex', 'w') as f:
     f.write(template)
+
+tsv = '#file is tab delimated\n# Name\tAffiliation\n'
+
+for mem, affil in zip(members_full, affiliations):
+    tsv += mem + '\t'
+    if type(affil) == list:
+        for i, aff in enumerate(affil):
+            if i != len(affil) - 1:
+                tsv += aff + '; also at '
+            else:
+                tsv += aff + '\n'
+    else:
+        tsv += affil + '\n'
+
+with open('member_list.tsv', 'w') as f:
+    f.write(tsv)
